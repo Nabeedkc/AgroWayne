@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Agro Wayne</string>
+    <string name="temp">temperature</string>
+    <string name="humi">humidity</string>
+    <string name="wind">Wind</string>
+    <string name="rain">rainfall</string>
 </resources>
