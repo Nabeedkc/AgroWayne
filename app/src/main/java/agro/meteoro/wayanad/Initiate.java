@@ -28,6 +28,7 @@ public class Initiate extends AppCompatActivity
                 net.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)
         {
             startActivity(new Intent(Initiate.this,Dashboard.class));
+            finish();
         }
         else
         {
