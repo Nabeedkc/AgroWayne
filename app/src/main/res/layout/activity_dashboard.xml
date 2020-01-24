@@ -24,15 +24,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50mm"
-                android:layout_gravity="center">
+                android:layout_height="50mm">
 
                 <ImageView
                     android:id="@+id/weather_state_img"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="#ECECEC" />
+                    android:layout_height="28mm"
+                    android:elevation="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -61,11 +59,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/temperature" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -101,11 +99,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/humidity" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -141,11 +139,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/wind" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -182,11 +180,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/rain" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -216,27 +214,35 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/current_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2mm"
+            android:layout_marginLeft="1.5mm"
             android:elevation="5dp"
             android:text="21°C"
             android:textSize="10mm"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="8.721dp"
             android:elevation="5dp"
             android:text="Last updated at: 24-01-2020"
             android:textColor="#80000000"
-            android:textSize="1.5mm"
+            android:textSize="8.55dp"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:textSize="11.4dp"
+            android:text="Mananthavady, Kerala\nIndia"
+            app:layout_constraintStart_toStartOf="@+id/current_temp"
+            app:layout_constraintTop_toBottomOf="@+id/current_temp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
