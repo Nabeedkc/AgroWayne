@@ -1,13 +1,11 @@
 package agro.meteoro.wayanad;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
+
 import android.os.Bundle;
-import android.view.textclassifier.TextLinks;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +15,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Dashboard extends AppCompatActivity
 {
     TextView temp,humi,wind,rain,current_temp;
     ImageView weather_status;
+    LineChart chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,7 +46,10 @@ public class Dashboard extends AppCompatActivity
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
         weather_status = findViewById(R.id.weather_state_img);
+
+        chart = findViewById(R.id.chart);
         get_weather_now();
+        start_chart();
     }
 
     private void get_weather_now()
@@ -73,4 +85,37 @@ public class Dashboard extends AppCompatActivity
         });
         weather_q.add(weather_req);
     }
+
+    private void start_chart()
+    {
+        ArrayList<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(0, 4));
+        entries.add(new Entry(1, 1));
+        entries.add(new Entry(2, 2));
+        entries.add(new Entry(3, 4));
+        entries.add(new Entry(4, 4));
+        entries.add(new Entry(5, 1));
+        entries.add(new Entry(6, 2));
+        entries.add(new Entry(7, 4));
+
+        LineDataSet dataSet = new LineDataSet(entries, "Customized values");
+        dataSet.setCubicIntensity(2f);
+        dataSet.setColor(ContextCompat.getColor(this, R.color.colorAccent));
+        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        YAxis yAxisRight = chart.getAxisRight();
+        yAxisRight.setEnabled(false);
+        YAxis yAxisLeft = chart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+        LineData data = new LineData(dataSet);
+
+        chart.setData(data);
+        chart.animateX(1000);
+        chart.invalidate();
+    }
+
 }
