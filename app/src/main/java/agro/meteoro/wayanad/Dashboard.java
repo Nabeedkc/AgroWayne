@@ -17,16 +17,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
 
 public class Dashboard extends AppCompatActivity
 {
@@ -100,7 +105,6 @@ public class Dashboard extends AppCompatActivity
                     JSONArray hours = params.getJSONArray(0);
                     JSONArray values = params.getJSONArray(1);
                     start_chart(hours,values);
-                    Toast.makeText(getApplicationContext(),hours.toString(),Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e){Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();}
             }
@@ -117,16 +121,23 @@ public class Dashboard extends AppCompatActivity
     private void start_chart(JSONArray hour, JSONArray value)
     {
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 5));
-        entries.add(new Entry(1, 45));
-        entries.add(new Entry(2, 25));
-        entries.add(new Entry(3, 75));
-        entries.add(new Entry(4, 65));
-        entries.add(new Entry(5, 15));
-        entries.add(new Entry(6, 35));
-        entries.add(new Entry(7, 55));
-        entries.add(new Entry(8, 85));
-        entries.add(new Entry(9, 115));
+        final String[] hrs = new String[hour.length()];
+            try
+            {
+                for (int i=0; i<hour.length(); i++)
+                {
+                    hrs[i]=hour.getString(i);
+                }
+
+                for (int i=0; i<value.length(); i++)
+                {
+                    entries.add(new Entry(i, valueOf(value.getInt(i))));
+                }
+
+            }
+            catch (Exception e){}
+
+
 
 
         LineDataSet dataSet = new LineDataSet(entries, "Customized values");
@@ -142,8 +153,17 @@ public class Dashboard extends AppCompatActivity
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(2f);
+        IAxisValueFormatter hours = new IAxisValueFormatter()
+        {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis)
+            {
+                return hrs[(int) value];
+            }
+        };
+        xAxis.setGranularity(1f);
         //xAxis.setEnabled(false);
+        xAxis.setValueFormatter(hours);
         xAxis.setDrawGridLines(false);
 
         YAxis yAxisRight = chart.getAxisRight();
@@ -161,7 +181,7 @@ public class Dashboard extends AppCompatActivity
         chart.setScaleEnabled(false);
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
-        chart.setVisibleXRangeMaximum(4);
+        chart.setVisibleXRangeMaximum(6);
         chart.animateXY(1000,1000);
         chart.invalidate();
     }
