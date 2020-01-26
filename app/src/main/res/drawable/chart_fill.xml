@@ -2,6 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
         android:angle="90"
-        android:startColor="@color/colorPrimary"
-        android:endColor="@android:color/white" />
+        android:startColor="@color/chart_grad_bottom"
+        android:endColor="@color/chart_grad_top"
+        android:type="linear"/>
 </shape>

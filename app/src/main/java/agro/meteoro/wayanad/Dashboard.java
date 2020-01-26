@@ -103,10 +103,13 @@ public class Dashboard extends AppCompatActivity
 
 
         LineDataSet dataSet = new LineDataSet(entries, "Customized values");
-        dataSet.setColor(ContextCompat.getColor(this, R.color.colorAccent));
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.chart_fill);
+
+        dataSet.setColor(ContextCompat.getColor(this, R.color.chart_grad_top));
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         dataSet.setDrawFilled(true);
+        dataSet.setFillDrawable(drawable);
 
 
 

@@ -29,7 +29,8 @@ public class Initiate extends AppCompatActivity {
         ConnectivityStatus();
     }
 
-    private void ConnectivityStatus() {
+    private void ConnectivityStatus()
+    {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (net.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 net.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
@@ -51,6 +52,11 @@ public class Initiate extends AppCompatActivity {
                 {
                     ActivityCompat.requestPermissions(Initiate.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
                 }
+        }
+        else
+        {
+            startActivity(new Intent(Initiate.this, Dashboard.class));
+            finish();
         }
     }
 
