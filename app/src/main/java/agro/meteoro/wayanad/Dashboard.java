@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -105,12 +106,14 @@ public class Dashboard extends AppCompatActivity
         dataSet.setColor(ContextCompat.getColor(this, R.color.colorAccent));
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setDrawFilled(true);
 
 
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(2f);
+        //xAxis.setEnabled(false);
         xAxis.setDrawGridLines(false);
 
         YAxis yAxisRight = chart.getAxisRight();
@@ -119,10 +122,16 @@ public class Dashboard extends AppCompatActivity
 
         YAxis yAxisLeft = chart.getAxisLeft();
         yAxisLeft.setGranularity(2f);
+        //yAxisLeft.setEnabled(false);
         yAxisLeft.setDrawGridLines(false);
 
         LineData data = new LineData(dataSet);
+
         chart.setData(data);
+        chart.setScaleEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        chart.setVisibleXRangeMaximum(4);
         chart.animateXY(1000,1000);
         chart.invalidate();
     }
