@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class Dashboard extends AppCompatActivity
 
         chart = findViewById(R.id.chart);
         get_weather_now();
-        start_chart();
     }
 
     private void get_weather_now()
@@ -83,9 +83,38 @@ public class Dashboard extends AppCompatActivity
             }
         });
         weather_q.add(weather_req);
+        get_weather_data();
     }
 
-    private void start_chart()
+    private void get_weather_data()
+    {
+        String url = "http://neutralizer.ml/weather/wd.php";
+        RequestQueue weather_q = Volley.newRequestQueue(this);
+        StringRequest weather_req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response)
+            {
+                try
+                {
+                    JSONArray params = new JSONArray(response);
+                    JSONArray hours = params.getJSONArray(0);
+                    JSONArray values = params.getJSONArray(1);
+                    start_chart(hours,values);
+                    Toast.makeText(getApplicationContext(),hours.toString(),Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e){Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        weather_q.add(weather_req);
+    }
+
+    private void start_chart(JSONArray hour, JSONArray value)
     {
         ArrayList<Entry> entries = new ArrayList<>();
         entries.add(new Entry(0, 5));
