@@ -1,25 +1,22 @@
 package agro.meteoro.wayanad;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class Initiate extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    LocationManager locationManager;
-    String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +29,16 @@ public class Initiate extends AppCompatActivity {
     private void ConnectivityStatus()
     {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (net.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                net.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+        assert net != null;
+        if (Objects.requireNonNull(net.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)).getState() == NetworkInfo.State.CONNECTED ||
+                Objects.requireNonNull(net.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).getState() == NetworkInfo.State.CONNECTED)
+        {
             LocationPermission();
-        } else {
-            Toast.makeText(getApplicationContext(), "Check your Internet Connectivity", Toast.LENGTH_SHORT).show();
         }
+        else
+            {
+                Toast.makeText(getApplicationContext(), "Check your Internet Connectivity", Toast.LENGTH_SHORT).show();
+            }
     }
 
     private void LocationPermission()
