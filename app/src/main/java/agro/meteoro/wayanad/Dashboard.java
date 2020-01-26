@@ -89,32 +89,41 @@ public class Dashboard extends AppCompatActivity
     private void start_chart()
     {
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 4));
-        entries.add(new Entry(1, 1));
-        entries.add(new Entry(2, 2));
-        entries.add(new Entry(3, 4));
-        entries.add(new Entry(4, 4));
-        entries.add(new Entry(5, 1));
-        entries.add(new Entry(6, 2));
-        entries.add(new Entry(7, 4));
+        entries.add(new Entry(0, 5));
+        entries.add(new Entry(1, 45));
+        entries.add(new Entry(2, 25));
+        entries.add(new Entry(3, 75));
+        entries.add(new Entry(4, 65));
+        entries.add(new Entry(5, 15));
+        entries.add(new Entry(6, 35));
+        entries.add(new Entry(7, 55));
+        entries.add(new Entry(8, 85));
+        entries.add(new Entry(9, 115));
+
 
         LineDataSet dataSet = new LineDataSet(entries, "Customized values");
-        dataSet.setCubicIntensity(2f);
         dataSet.setColor(ContextCompat.getColor(this, R.color.colorAccent));
         dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
 
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
+        xAxis.setGranularity(2f);
+        xAxis.setDrawGridLines(false);
+
         YAxis yAxisRight = chart.getAxisRight();
         yAxisRight.setEnabled(false);
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setGranularity(1f);
-        LineData data = new LineData(dataSet);
+        yAxisRight.setDrawGridLines(false);
 
+        YAxis yAxisLeft = chart.getAxisLeft();
+        yAxisLeft.setGranularity(2f);
+        yAxisLeft.setDrawGridLines(false);
+
+        LineData data = new LineData(dataSet);
         chart.setData(data);
-        chart.animateX(1000);
+        chart.animateXY(1000,1000);
         chart.invalidate();
     }
 
