@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".Initiate"
     android:orientation="vertical">
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="intitial"
-        android:textSize="50dp"/>
+        android:scaleType="center"
+        android:src="@mipmap/ic_launcher"/>
 
 </LinearLayout>
