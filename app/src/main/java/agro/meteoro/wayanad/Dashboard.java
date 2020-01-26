@@ -53,7 +53,7 @@ public class Dashboard extends AppCompatActivity
 
     private void get_weather_now()
     {
-        String url = "http://gecdatahandler.000webhostapp.com/get_weather_now.php";
+        String url = "http://neutralizer.ml/weather/get_weather_now.php";
         RequestQueue weather_q = Volley.newRequestQueue(this);
         StringRequest weather_req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
