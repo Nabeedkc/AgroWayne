@@ -4,8 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +29,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +44,7 @@ public class Dashboard extends AppCompatActivity
     TextView temp,humi,wind,rain,current_temp;
     ImageView weather_status;
     LineChart chart;
+    AVLoadingIndicatorView chart_loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,8 +58,10 @@ public class Dashboard extends AppCompatActivity
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
         weather_status = findViewById(R.id.weather_state_img);
-
+        chart_loader = findViewById(R.id.chartLoader);
         chart = findViewById(R.id.chart);
+        chart.setVisibility(View.INVISIBLE);
+        chart_loader.show();
         get_weather_now();
     }
 
@@ -184,6 +193,9 @@ public class Dashboard extends AppCompatActivity
         chart.setVisibleXRangeMaximum(6);
         chart.animateXY(1000,1000);
         chart.invalidate();
+
+        chart.setVisibility(View.VISIBLE);
+        chart_loader.hide();
     }
 
 }
