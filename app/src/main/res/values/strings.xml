@@ -8,4 +8,5 @@
     <string name="humi_unit">%1$s%%</string>
     <string name="wind_unit">%1$skm/h</string>
     <string name="rain_unit">%1$smm</string>
+    <string name="na">-/-</string>
 </resources>

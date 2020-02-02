@@ -2,19 +2,24 @@ package agro.meteoro.wayanad;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
-
+import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,13 +35,14 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.wang.avi.AVLoadingIndicatorView;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 
 public class Dashboard extends AppCompatActivity
@@ -45,6 +51,7 @@ public class Dashboard extends AppCompatActivity
     ImageView weather_status;
     LineChart chart;
     AVLoadingIndicatorView chart_loader;
+    TextView cityText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +59,7 @@ public class Dashboard extends AppCompatActivity
         hide_sys_ui.hideui(getWindow().getDecorView());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
         current_temp = findViewById(R.id.current_temp);
         temp = findViewById(R.id.temp_value);
         humi = findViewById(R.id.humi_value);
@@ -60,8 +68,12 @@ public class Dashboard extends AppCompatActivity
         weather_status = findViewById(R.id.weather_state_img);
         chart_loader = findViewById(R.id.chartLoader);
         chart = findViewById(R.id.chart);
+        cityText = findViewById(R.id.city);
+
         chart.setVisibility(View.INVISIBLE);
         chart_loader.show();
+
+        get_city();
         get_weather_now();
     }
 
@@ -144,7 +156,7 @@ public class Dashboard extends AppCompatActivity
                 }
 
             }
-            catch (Exception e){}
+            catch (Exception e){e.printStackTrace();}
 
 
 
@@ -196,6 +208,44 @@ public class Dashboard extends AppCompatActivity
 
         chart.setVisibility(View.VISIBLE);
         chart_loader.hide();
+    }
+
+    private void get_city()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Toast.makeText(getApplicationContext(),"Location Permission Denied",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            String city = get_city_name(location.getLatitude(),location.getLongitude());
+            cityText.setText(city);
+        }
+    }
+    private String get_city_name(double lat, double log)
+    {
+        String city = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        try
+        {
+            addresses = geocoder.getFromLocation(lat,log,10);
+            if(addresses.size() > 0)
+            {
+                for(Address adr: addresses)
+                {
+                    if(adr.getLocality() != null && adr.getLocality().length() > 0)
+                    {
+                        city = adr.getLocality() +", "+ adr.getAdminArea() +"\n"+ adr.getCountryName();
+                        break;
+                    }
+                }
+            }
+        }
+        catch (IOException e){e.printStackTrace();}
+        return city;
     }
 
 }

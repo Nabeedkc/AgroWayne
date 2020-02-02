@@ -29,7 +29,7 @@
                 <ImageView
                     android:id="@+id/weather_state_img"
                     android:layout_width="match_parent"
-                    android:layout_height="28mm"
+                    android:layout_height="159.6dp"
                     android:elevation="10dp"/>
             </LinearLayout>
 
@@ -43,7 +43,7 @@
 
                 <GridLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20mm"
+                    android:layout_height="114dp"
                     android:alignmentMode="alignMargins"
                     android:columnCount="2"
                     android:columnOrderPreserved="false"
@@ -62,7 +62,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:src="@drawable/temperature" />
 
                         <LinearLayout
@@ -76,13 +76,13 @@
                                 android:id="@+id/temp_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
-                                android:text="21" />
+                                android:gravity="center|start"
+                                android:text="@string/na" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:text="@string/temp"
                                 android:textAllCaps="true"
                                 android:textColor="@android:color/darker_gray" />
@@ -102,7 +102,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:src="@drawable/humidity" />
 
                         <LinearLayout
@@ -110,19 +110,19 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:paddingLeft="15dp">
+                            android:paddingStart="15dp">
 
                             <TextView
                                 android:id="@+id/humi_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
-                                android:text="21" />
+                                android:gravity="center|start"
+                                android:text="@string/na" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:text="@string/humi"
                                 android:textAllCaps="true"
                                 android:textColor="@android:color/darker_gray" />
@@ -142,7 +142,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:src="@drawable/wind" />
 
                         <LinearLayout
@@ -151,19 +151,19 @@
                             android:elevation="1.65dp"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:paddingLeft="15dp">
+                            android:paddingStart="15dp">
 
                             <TextView
                                 android:id="@+id/wind_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
-                                android:text="21" />
+                                android:gravity="center|start"
+                                android:text="@string/na" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:text="@string/wind"
                                 android:textAllCaps="true"
                                 android:textColor="@android:color/darker_gray" />
@@ -183,7 +183,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:src="@drawable/rain" />
 
                         <LinearLayout
@@ -197,13 +197,13 @@
                                 android:id="@+id/rain_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
-                                android:text="21" />
+                                android:gravity="center|start"
+                                android:text="@string/na" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:text="@string/rain"
                                 android:textAllCaps="true"
                                 android:textColor="@android:color/darker_gray" />
@@ -216,9 +216,9 @@
             android:id="@+id/current_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="1.5mm"
+            android:layout_marginStart="8.55dp"
             android:elevation="5dp"
-            android:text="21°C"
+            android:text="@string/na"
             android:textSize="10mm"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
@@ -233,13 +233,11 @@
             android:textSize="8.55dp"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
-
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            android:text="Mananthavady, Kerala\nIndia"
             android:textSize="11.4dp"
             app:layout_constraintStart_toStartOf="@+id/current_temp"
             app:layout_constraintTop_toBottomOf="@+id/current_temp" />
