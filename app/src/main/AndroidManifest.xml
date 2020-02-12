@@ -17,7 +17,9 @@
         android:usesCleartextTraffic="true">
 
         <activity android:name=".Dashboard" />
-        <activity android:name=".Initiate">
+        <activity
+            android:name=".Initiate"
+            android:theme="@style/Initial">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
