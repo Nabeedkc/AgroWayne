@@ -93,10 +93,7 @@ public class Dashboard extends AppCompatActivity
                     humi.setText(getString(R.string.humi_unit, params.getString("humi")));
                     wind.setText(getString(R.string.wind_unit, params.getString("wind")));
                     rain.setText(getString(R.string.rain_unit, params.getString("rain")));
-                    if(params.getInt("temp")<30)
-                    {
-                        weather_status.setBackground(getDrawable(R.drawable.ic_back_clear_sky));
-                    }
+
 
                 }
                 catch (Exception e){e.printStackTrace();}
