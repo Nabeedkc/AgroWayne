@@ -6,6 +6,7 @@ import androidx.core.content.PermissionChecker;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -49,9 +51,9 @@ public class Dashboard extends AppCompatActivity
 {
     TextView temp,humi,wind,rain,current_temp;
     ImageView weather_status;
-    LineChart chart;
-    AVLoadingIndicatorView chart_loader;
     TextView cityText;
+    LinearLayout temp_click,humi_click,wind_click,rain_click;
+    Intent gotoGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,13 +68,16 @@ public class Dashboard extends AppCompatActivity
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
         weather_status = findViewById(R.id.weather_state_img);
-        chart_loader = findViewById(R.id.chartLoader);
-        chart = findViewById(R.id.chart);
         cityText = findViewById(R.id.city);
 
-        chart.setVisibility(View.INVISIBLE);
-        chart_loader.show();
+        temp_click = findViewById(R.id.start_temp_graph);
+        humi_click = findViewById(R.id.start_humi_graph);
+        wind_click = findViewById(R.id.start_wind_graph);
+        rain_click = findViewById(R.id.start_rain_graph);
 
+        gotoGraph = new Intent(Dashboard.this,Graph.class);
+
+        setClickListener();
         get_city();
         get_weather_now();
     }
@@ -94,7 +99,6 @@ public class Dashboard extends AppCompatActivity
                     wind.setText(getString(R.string.wind_unit, params.getString("wind")));
                     rain.setText(getString(R.string.rain_unit, params.getString("rain")));
 
-
                 }
                 catch (Exception e){e.printStackTrace();}
             }
@@ -106,107 +110,52 @@ public class Dashboard extends AppCompatActivity
             }
         });
         weather_q.add(weather_req);
-        get_weather_data();
     }
-
-    private void get_weather_data()
+    private void setClickListener()
     {
-        String url = "http://neutralizer.ml/weather/wd.php";
-        RequestQueue weather_q = Volley.newRequestQueue(this);
-        StringRequest weather_req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response)
-            {
-                try
-                {
-                    JSONArray params = new JSONArray(response);
-                    JSONArray hours = params.getJSONArray(0);
-                    JSONArray values = params.getJSONArray(1);
-                    start_chart(hours,values);
-                }
-                catch (Exception e){Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();}
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
-            }
-        });
-        weather_q.add(weather_req);
-    }
-
-    private void start_chart(JSONArray hour, JSONArray value)
-    {
-        ArrayList<Entry> entries = new ArrayList<>();
-        final String[] hrs = new String[hour.length()];
-            try
-            {
-                for (int i=0; i<hour.length(); i++)
-                {
-                    hrs[i]=hour.getString(i);
-                }
-
-                for (int i=0; i<value.length(); i++)
-                {
-                    entries.add(new Entry(i, valueOf(value.getInt(i))));
-                }
-
-            }
-            catch (Exception e){e.printStackTrace();}
-
-
-
-
-        LineDataSet dataSet = new LineDataSet(entries, "Customized values");
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.chart_fill);
-
-        dataSet.setColor(ContextCompat.getColor(this, R.color.chart_grad_top));
-        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setDrawFilled(true);
-        dataSet.setFillDrawable(drawable);
-
-
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        IAxisValueFormatter hours = new IAxisValueFormatter()
+        temp_click.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public String getFormattedValue(float value, AxisBase axis)
+            public void onClick(View view)
             {
-                return hrs[(int) value];
+                gotoGraph.putExtra("ChartId","temperature");
+                startActivity(gotoGraph);
             }
-        };
-        xAxis.setGranularity(1f);
-        //xAxis.setEnabled(false);
-        xAxis.setValueFormatter(hours);
-        xAxis.setDrawGridLines(false);
+        });
 
-        YAxis yAxisRight = chart.getAxisRight();
-        yAxisRight.setEnabled(false);
-        yAxisRight.setDrawGridLines(false);
 
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setGranularity(2f);
-        //yAxisLeft.setEnabled(false);
-        yAxisLeft.setDrawGridLines(false);
+        humi_click.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                gotoGraph.putExtra("ChartId","humidity");
+                startActivity(gotoGraph);
+            }
+        });
 
-        LineData data = new LineData(dataSet);
 
-        chart.setData(data);
-        chart.setScaleEnabled(false);
-        chart.getDescription().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.setVisibleXRangeMaximum(6);
-        chart.animateXY(1000,1000);
-        chart.invalidate();
+        wind_click.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                gotoGraph.putExtra("ChartId","wind");
+                startActivity(gotoGraph);
+            }
+        });
 
-        chart.setVisibility(View.VISIBLE);
-        chart_loader.hide();
+
+        rain_click.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                gotoGraph.putExtra("ChartId","rain");
+                startActivity(gotoGraph);
+            }
+        });
     }
-
     private void get_city()
     {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
