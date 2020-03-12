@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Agro Wayne</string>
+    <string name="humi" translatable="false">ഈര്‍പ്പം</string>
+    <string name="rain" translatable="false">മഴ</string>
+    <string name="temp" translatable="false">താപനില</string>
+    <string name="wind" translatable="false">കാറ്റ്</string>
+</resources>

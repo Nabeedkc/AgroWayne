@@ -11,19 +11,32 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class Initiate extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    Handler splashhandler;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         hide_sys_ui.hideui(getWindow().getDecorView());     //hide navigation keys
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initiate);
-        ConnectivityStatus();
+        new CountDownTimer(1250, 1000)
+        {
+            public void onFinish()
+            {
+                ConnectivityStatus();
+            }
+            public void onTick(long millisUntilFinished)
+            {}
+        }.start();
     }
 
     private void ConnectivityStatus()
@@ -56,7 +69,7 @@ public class Initiate extends AppCompatActivity {
         }
         else
         {
-            startActivity(new Intent(Initiate.this, Dashboard.class));
+            startActivity(new Intent(Initiate.this, Preferences.class));
             finish();
         }
     }
@@ -71,7 +84,7 @@ public class Initiate extends AppCompatActivity {
                 {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                     {
-                        startActivity(new Intent(Initiate.this, Dashboard.class));
+                        startActivity(new Intent(Initiate.this, Preferences.class));
                         finish();
                     }
                 }

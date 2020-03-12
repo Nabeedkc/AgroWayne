@@ -15,11 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Graph"></activity>
+        <activity android:name=".Preferences"></activity>
+        <activity android:name=".Graph" />
         <activity android:name=".Dashboard" />
         <activity
             android:name=".Initiate"
-            android:theme="@style/Initial">
+            android:theme="@style/AppTheme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
