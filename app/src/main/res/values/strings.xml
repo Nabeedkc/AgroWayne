@@ -15,11 +15,13 @@
 
     <string name="lang_title">Select a Language</string>
     <string name="crop_title">Select Crop</string>
+    <string name="App_Title">Agro Wayne</string>
 
     <string name="crop_rice">Rice</string>
     <string name="crop_tea">Tea</string>
     <string name="crop_coffee">Coffee</string>
     <string name="crop_bpepper">Black Pepper</string>
+    <string name="description">Improve or prevent loss of crops by taking a step ahead</string>
 
 
 </resources>
