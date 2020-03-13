@@ -6,4 +6,10 @@
 
     <color name="chart_grad_top">#6DD5FA</color>
     <color name="chart_grad_bottom">#fff</color>
+
+    <color name="bg_1">#7C0097</color>
+    <color name="bg_2">#2EAF00</color>
+    <color name="bg_3">#FFCC1A</color>
+    <color name="bg_4">#008BD6</color>
+
 </resources>
