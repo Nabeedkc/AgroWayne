@@ -1,14 +1,15 @@
 <resources>
     <string name="app_name">Agro Wayne</string>
-    <string name="temp">temperature</string>
-    <string name="wind">Wind</string>
-    <string name="rain">rainfall</string>
-    <string name="humi">humidity</string>
+    <string name="temp">താപനില</string>
+    <string name="wind">കാറ്റ്</string>
+    <string name="rain">മഴ</string>
+    <string name="humi">ഈര്‍പ്പം</string>
     <string name="temp_unit">%1$s°C</string>
     <string name="humi_unit">%1$s%%</string>
     <string name="wind_unit">%1$skm/h</string>
     <string name="rain_unit">%1$smm</string>
     <string name="na">-/-</string>
+    <string name="last_update">അവസാനം പുതുക്കിയത് :</string>
 
     <string name="english_radio">English</string>
     <string name="malayalam_radio">മലയാളം</string>

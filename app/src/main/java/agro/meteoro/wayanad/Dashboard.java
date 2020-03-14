@@ -7,7 +7,10 @@ import androidx.core.content.PermissionChecker;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -60,6 +64,11 @@ public class Dashboard extends AppCompatActivity
     {
         hide_sys_ui.hideui(getWindow().getDecorView());
         super.onCreate(savedInstanceState);
+        //Set Language
+        SharedPreferences preferences = getSharedPreferences("Preferences",MODE_PRIVATE);
+        String lang = preferences.getString("Language","");
+        setLang(lang); //End of Set Language
+
         setContentView(R.layout.activity_dashboard);
 
         current_temp = findViewById(R.id.current_temp);
@@ -192,6 +201,21 @@ public class Dashboard extends AppCompatActivity
         }
         catch (IOException e){e.printStackTrace();}
         return city;
+    }
+    private void setLang(String locale)
+    {
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1)
+        {
+            config.setLocale(new Locale(locale.toLowerCase()));
+        }
+        else
+        {
+            config.locale = new Locale(locale.toLowerCase());
+        }
+        resources.updateConfiguration(config, dm);
     }
 
 }

@@ -236,9 +236,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8.721dp"
             android:elevation="5dp"
-            android:text="Last updated at: 24-01-2020"
+            android:text="@string/last_update"
             android:textColor="#80000000"
-            android:textSize="8.55dp"
+            android:textSize="8.55sp"
             app:layout_constraintStart_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
         <TextView

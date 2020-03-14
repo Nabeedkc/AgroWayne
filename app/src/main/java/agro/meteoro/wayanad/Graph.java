@@ -3,9 +3,16 @@ package agro.meteoro.wayanad;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static java.lang.Long.valueOf;
 
@@ -43,9 +51,13 @@ public class Graph extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph);
-        chartId = getIntent().getStringExtra("ChartId");
+        SharedPreferences preferences = getSharedPreferences("Preferences",MODE_PRIVATE);
+        String lang = preferences.getString("Language","");
+        setLang(lang);
 
+        setContentView(R.layout.activity_graph);
+
+        chartId = getIntent().getStringExtra("ChartId");
         chart = findViewById(R.id.chart);
         chart_loader = findViewById(R.id.chartLoader);
         chartTitle = findViewById(R.id.chart_name);
@@ -60,16 +72,16 @@ public class Graph extends AppCompatActivity
     private void setChartTitle()
     {
         if(chartId.equals("temperature"))
-            chartTitle.setText("Temperature");
+            chartTitle.setText(R.string.temp);
 
         if(chartId.equals("humidity"))
-            chartTitle.setText("Humidity");
+            chartTitle.setText(R.string.humi);
 
         if(chartId.equals("wind"))
-            chartTitle.setText("Wind");
+            chartTitle.setText(R.string.wind);
 
         if(chartId.equals("rain"))
-            chartTitle.setText("Rainfall");
+            chartTitle.setText(R.string.rain);
     }
 
     private void get_weather_data()
@@ -169,6 +181,22 @@ public class Graph extends AppCompatActivity
 
         chart.setVisibility(View.VISIBLE);
         chart_loader.hide();
+    }
+
+    private void setLang(String locale)
+    {
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1)
+        {
+            config.setLocale(new Locale(locale.toLowerCase()));
+        }
+        else
+        {
+            config.locale = new Locale(locale.toLowerCase());
+        }
+        resources.updateConfiguration(config, dm);
     }
 
 
