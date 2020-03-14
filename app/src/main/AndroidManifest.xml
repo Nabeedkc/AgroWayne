@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Preferences"></activity>
+        <activity android:name=".SelectCrop"></activity>
+        <activity android:name=".SelectLanguage" />
         <activity android:name=".Graph" />
         <activity android:name=".Dashboard" />
         <activity
@@ -23,6 +24,7 @@
             android:theme="@style/AppTheme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
