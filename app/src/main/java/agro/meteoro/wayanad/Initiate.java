@@ -104,7 +104,7 @@ public class Initiate extends AppCompatActivity
             startActivity(new Intent(Initiate.this, SelectLanguage.class));
             finish();
         }
-        else if (preferences.getString("Crop","").equals(""))
+        else if (preferences.getString("Crops","").equals(""))
         {
             startActivity(new Intent(Initiate.this, SelectCrop.class));
             finish();

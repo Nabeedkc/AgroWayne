@@ -58,6 +58,7 @@ public class Dashboard extends AppCompatActivity
     TextView cityText;
     LinearLayout temp_click,humi_click,wind_click,rain_click;
     Intent gotoGraph;
+    int counter = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -216,6 +217,20 @@ public class Dashboard extends AppCompatActivity
             config.locale = new Locale(locale.toLowerCase());
         }
         resources.updateConfiguration(config, dm);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(counter>=1)
+        {
+            Toast.makeText(getApplicationContext(),"Press once again to Exit",Toast.LENGTH_SHORT).show();
+        }
+        if(counter<1)
+        {
+            super.finish();
+        }
+        counter--;
     }
 
 }
