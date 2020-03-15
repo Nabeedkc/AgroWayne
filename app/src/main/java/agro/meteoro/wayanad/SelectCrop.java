@@ -22,6 +22,7 @@ public class SelectCrop extends AppCompatActivity
     ImageButton next_dash;
     SharedPreferences preferences;
     CheckBox tea,rice,coffee,bpepper;
+    int counter = 1;
 
 
     @Override
@@ -88,6 +89,7 @@ public class SelectCrop extends AppCompatActivity
                 {e.printStackTrace();}
                 preferences.edit().putString("Crops",crops.toString()).commit();
                 startActivity(new Intent(SelectCrop.this,Dashboard.class));
+                finish();
             }
         });
     }
@@ -108,4 +110,17 @@ public class SelectCrop extends AppCompatActivity
         resources.updateConfiguration(config, dm);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if(counter>=1)
+        {
+            Toast.makeText(getApplicationContext(),"Press once again to Exit",Toast.LENGTH_SHORT).show();
+        }
+        if(counter<1)
+        {
+            super.finish();
+        }
+        counter--;
+    }
 }

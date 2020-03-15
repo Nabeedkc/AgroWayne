@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -25,6 +26,7 @@ public class SelectLanguage extends AppCompatActivity
     RadioButton lang_selected;
     ImageButton next_pref;
     int id;
+    int counter =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,12 +49,14 @@ public class SelectLanguage extends AppCompatActivity
                 {
                     change("default");
                     startActivity(new Intent(SelectLanguage.this,SelectCrop.class));
+                    finish();
 
                 }
                 else
                 {
                     change("ML");
                     startActivity(new Intent(SelectLanguage.this,SelectCrop.class));
+                    finish();
                 }
             }
         });
@@ -74,6 +78,20 @@ public class SelectLanguage extends AppCompatActivity
         resources.updateConfiguration(config, dm);
         PrefEditor.putString("Language",localeCode);
         PrefEditor.commit();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(counter>=1)
+        {
+            Toast.makeText(getApplicationContext(),"Press once again to Exit",Toast.LENGTH_SHORT).show();
+        }
+        if(counter<1)
+        {
+            super.finish();
+        }
+        counter--;
     }
 
 
