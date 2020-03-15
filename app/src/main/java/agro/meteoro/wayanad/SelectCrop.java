@@ -17,9 +17,11 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
+import spencerstudios.com.bungeelib.Bungee;
+
 public class SelectCrop extends AppCompatActivity
 {
-    ImageButton next_dash;
+    ImageButton next_dash, previous;
     SharedPreferences preferences;
     CheckBox tea,rice,coffee,bpepper;
     int counter = 1;
@@ -35,6 +37,8 @@ public class SelectCrop extends AppCompatActivity
 
         setContentView(R.layout.activity_select_crop);
         next_dash = findViewById(R.id.next_2);
+        previous = findViewById(R.id.prev_1);
+
         tea = findViewById(R.id.check_tea);
         rice = findViewById(R.id.check_rice);
         coffee = findViewById(R.id.check_coffee);
@@ -47,48 +51,63 @@ public class SelectCrop extends AppCompatActivity
             public void onClick(View view)
             {
                 JSONObject crops = new JSONObject();
-                try
+                if(!(tea.isChecked())&& !(rice.isChecked()) && !(coffee.isChecked()) && !(bpepper.isChecked()))
                 {
-                    if(tea.isChecked())
-                    {
-                        crops.put("Tea",1);
-                    }
-                    else
-                    {
-                        crops.put("Tea",0);
-                    }
-
-                    if(rice.isChecked())
-                    {
-                        crops.put("Rice",1);
-                    }
-                    else
-                    {
-                        crops.put("Rice",0);
-                    }
-
-                    if(coffee.isChecked())
-                    {
-                        crops.put("Coffee",1);
-                    }
-                    else
-                    {
-                        crops.put("Coffee",0);
-                    }
-
-                    if(bpepper.isChecked())
-                    {
-                        crops.put("BPepper",1);
-                    }
-                    else
-                    {
-                        crops.put("BPepper",0);
-                    }
+                    Toast.makeText(getApplicationContext(),R.string.need_crop,Toast.LENGTH_SHORT).show();
                 }
-                catch (Exception e)
-                {e.printStackTrace();}
-                preferences.edit().putString("Crops",crops.toString()).commit();
-                startActivity(new Intent(SelectCrop.this,Dashboard.class));
+                else
+                {
+                    try
+                    {
+                        if(tea.isChecked())
+                        {
+                            crops.put("Tea",1);
+                        }
+                        else
+                        {
+                            crops.put("Tea",0);
+                        }
+
+                        if(rice.isChecked())
+                        {
+                            crops.put("Rice",1);
+                        }
+                        else
+                        {
+                            crops.put("Rice",0);
+                        }
+
+                        if(coffee.isChecked())
+                        {
+                            crops.put("Coffee",1);
+                        }
+                        else
+                        {
+                            crops.put("Coffee",0);
+                        }
+
+                        if(bpepper.isChecked())
+                        {
+                            crops.put("BPepper",1);
+                        }
+                        else
+                        {
+                            crops.put("BPepper",0);
+                        }
+                    }
+                    catch (Exception e)
+                    {e.printStackTrace();}
+                    preferences.edit().putString("Crops",crops.toString()).commit();
+                    startActivity(new Intent(SelectCrop.this,Dashboard.class));
+                    finish();
+                }
+            }
+        });
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SelectCrop.this,SelectLanguage.class));
                 finish();
             }
         });

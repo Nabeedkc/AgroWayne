@@ -22,6 +22,7 @@
     <string name="crop_tea">Tea</string>
     <string name="crop_coffee">Coffee</string>
     <string name="crop_bpepper">Black Pepper</string>
+    <string name="need_crop">Select atleast one crop</string>
     <string name="description">Improve or prevent loss of crops by taking a step ahead</string>
 
 

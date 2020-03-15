@@ -7,10 +7,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="50dp"
         app:cardElevation="5dp"
+        app:cardCornerRadius="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +25,7 @@
             android:text="@string/lang_title"
             android:textAlignment="center"
             android:layout_marginHorizontal="20dp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/dark_text"
             android:textSize="30sp"
             android:textStyle="bold"/>
 
@@ -53,7 +54,7 @@
                     android:buttonTint="@android:color/darker_gray"
                     android:checked="true"
                     android:text="@string/english_radio"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/dark_light_text"
                     android:textSize="20sp" />
 
                 <View
@@ -66,18 +67,28 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="@android:color/darker_gray"
                     android:text="@string/malayalam_radio"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/dark_light_text"
                     android:textSize="20sp" />
             </RadioGroup>
 
-            <ImageButton
-                android:id="@+id/next_1"
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/circle_shape"
-                android:src="@drawable/ic_next"
-                android:tint="@color/chart_grad_top"/>
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                app:cardElevation="3dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp">
+                <ImageButton
+                    android:id="@+id/next_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/white"
+                    android:src="@drawable/ic_next"
+                    android:tint="@color/next_icon"/>
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

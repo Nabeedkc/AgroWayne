@@ -4,12 +4,11 @@
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#000</color>
 
+    <color name="dark_text">#535353</color>
+    <color name="dark_light_text">#656565</color>
+
     <color name="chart_grad_top">#6DD5FA</color>
     <color name="chart_grad_bottom">#fff</color>
-
-    <color name="bg_1">#7C0097</color>
-    <color name="bg_2">#2EAF00</color>
-    <color name="bg_3">#FFCC1A</color>
-    <color name="bg_4">#008BD6</color>
+    <color name="next_icon">#BA00C1F1</color>
 
 </resources>

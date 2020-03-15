@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import spencerstudios.com.bungeelib.Bungee;
+
 public class SelectLanguage extends AppCompatActivity
 {
     SharedPreferences preferences;
@@ -48,6 +50,7 @@ public class SelectLanguage extends AppCompatActivity
                 if(lang_selected.getText().equals("English"))
                 {
                     change("default");
+//                    Bungee.swipeRight(getApplicationContext());
                     startActivity(new Intent(SelectLanguage.this,SelectCrop.class));
                     finish();
 
