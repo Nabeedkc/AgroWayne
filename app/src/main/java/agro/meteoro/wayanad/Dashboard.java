@@ -1,6 +1,9 @@
 package agro.meteoro.wayanad;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,14 +43,17 @@ public class Dashboard extends AppCompatActivity
 {
     TextView temp,humi,wind,rain,current_temp;
     ImageView weather_status;
-    TextView cityText;
+    TextView cityText,advice_title;
     LinearLayout temp_click,humi_click,wind_click,rain_click;
     Intent gotoGraph;
     int counter = 1;
     JSONObject requested_data;
-    TextView log1,log2,log3,log4;
     SharedPreferences preferences;
     String crops;
+    ArrayList<String> advice_text = new ArrayList<>();
+    private RecyclerView advice_recy;
+    private RecyclerView.Adapter advice_adapter;
+    private RecyclerView.LayoutManager advices_lyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,11 +72,6 @@ public class Dashboard extends AppCompatActivity
         humi = findViewById(R.id.humi_value);
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
-
-        log1 = findViewById(R.id.log1);
-        log2 = findViewById(R.id.log2);
-        log3 = findViewById(R.id.log3);
-        log4 = findViewById(R.id.log4);
 
         weather_status = findViewById(R.id.weather_state_img);
         cityText = findViewById(R.id.city);
@@ -141,19 +143,19 @@ public class Dashboard extends AppCompatActivity
                 {
                     if(requested_data.getInt("Tea")==1)
                     {
-                        log1.setText(response.getJSONArray("tea_instruct").toString());
+                        advice_list(response.getJSONArray("tea_instruct"), R.id.tea_recycle, R.id.tea_advice_title);
                     }
                     if(requested_data.getInt("Rice")==1)
                     {
-                        log2.setText(response.getJSONArray("rice_instruct").toString());
+                        advice_list(response.getJSONArray("rice_instruct"), R.id.rice_recycle, R.id.rice_advice_title);
                     }
                     if(requested_data.getInt("Coffee")==1)
                     {
-                        log3.setText(response.getJSONArray("coffee_instruct").toString());
+                        advice_list(response.getJSONArray("coffee_instruct"), R.id.coffee_recycle, R.id.coffee_advice_title);
                     }
                     if(requested_data.getInt("Bpepper")==1)
                     {
-                        log4.setText(response.getJSONArray("bpepper_instruct").toString());
+                        advice_list(response.getJSONArray("bpepper_instruct"), R.id.bpepper_recycle, R.id.bpepper_advice_title);
                     }
                 }
                 catch (Exception e)
@@ -267,6 +269,36 @@ public class Dashboard extends AppCompatActivity
             config.locale = new Locale(locale.toLowerCase());
         }
         resources.updateConfiguration(config, dm);
+    }
+
+    private void advice_list(JSONArray data_instructions, int advice_id, int title_id)
+    {
+        try
+        {
+            advice_text.clear();
+            for (int i = 0; i < data_instructions.length(); i++)
+            {
+                advice_text.add(data_instructions.getString(i));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        advice_recy = findViewById(advice_id);
+        advice_recy.setVisibility(View.VISIBLE);
+        findViewById(title_id).setVisibility(View.VISIBLE);
+        advices_lyt = new LinearLayoutManager(getApplicationContext());
+        advice_recy.setLayoutManager(advices_lyt);
+
+        advice_adapter = new Advice_Recycler(getApplicationContext(), advice_text);
+        advice_recy.setAdapter(advice_adapter);
+        advice_recy = findViewById(R.id.tea_recycle);
+        advices_lyt = new LinearLayoutManager(getApplicationContext());
+        advice_recy.setLayoutManager(advices_lyt);
+
+        advice_adapter = new Advice_Recycler(getApplicationContext(), advice_text);
+        advice_recy.setAdapter(advice_adapter);
     }
 
     @Override
