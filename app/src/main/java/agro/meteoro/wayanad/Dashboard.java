@@ -1,9 +1,6 @@
 package agro.meteoro.wayanad;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -11,16 +8,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,26 +24,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.wang.avi.AVLoadingIndicatorView;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static java.lang.Integer.valueOf;
 
 public class Dashboard extends AppCompatActivity
 {
@@ -59,6 +43,10 @@ public class Dashboard extends AppCompatActivity
     LinearLayout temp_click,humi_click,wind_click,rain_click;
     Intent gotoGraph;
     int counter = 1;
+    JSONObject requested_data;
+    TextView log1,log2,log3,log4;
+    SharedPreferences preferences;
+    String crops;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,7 +54,7 @@ public class Dashboard extends AppCompatActivity
         hide_sys_ui.hideui(getWindow().getDecorView());
         super.onCreate(savedInstanceState);
         //Set Language
-        SharedPreferences preferences = getSharedPreferences("Preferences",MODE_PRIVATE);
+        preferences = getSharedPreferences("Preferences",MODE_PRIVATE);
         String lang = preferences.getString("Language","");
         setLang(lang); //End of Set Language
 
@@ -77,6 +65,12 @@ public class Dashboard extends AppCompatActivity
         humi = findViewById(R.id.humi_value);
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
+
+        log1 = findViewById(R.id.log1);
+        log2 = findViewById(R.id.log2);
+        log3 = findViewById(R.id.log3);
+        log4 = findViewById(R.id.log4);
+
         weather_status = findViewById(R.id.weather_state_img);
         cityText = findViewById(R.id.city);
 
@@ -90,6 +84,7 @@ public class Dashboard extends AppCompatActivity
         setClickListener();
         get_city();
         get_weather_now();
+        get_crop_advice();
     }
 
     private void get_weather_now()
@@ -108,7 +103,6 @@ public class Dashboard extends AppCompatActivity
                     humi.setText(getString(R.string.humi_unit, params.getString("humi")));
                     wind.setText(getString(R.string.wind_unit, params.getString("wind")));
                     rain.setText(getString(R.string.rain_unit, params.getString("rain")));
-
                 }
                 catch (Exception e){e.printStackTrace();}
             }
@@ -120,6 +114,62 @@ public class Dashboard extends AppCompatActivity
             }
         });
         weather_q.add(weather_req);
+    }
+    private void get_crop_advice()
+    {
+        String advice_url = "http://neutralizer.ml/weather/advice.php";
+        RequestQueue advice_q = Volley.newRequestQueue(getApplicationContext());
+        JSONObject req_data = new JSONObject();
+        crops = preferences.getString("Crops","");
+
+        try
+        {
+            req_data = new JSONObject(crops);
+            requested_data = req_data;
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        JsonObjectRequest advice_req = new JsonObjectRequest(Request.Method.POST, advice_url, req_data,
+        new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    if(requested_data.getInt("Tea")==1)
+                    {
+                        log1.setText(response.getJSONArray("tea_instruct").toString());
+                    }
+                    if(requested_data.getInt("Rice")==1)
+                    {
+                        log2.setText(response.getJSONArray("rice_instruct").toString());
+                    }
+                    if(requested_data.getInt("Coffee")==1)
+                    {
+                        log3.setText(response.getJSONArray("coffee_instruct").toString());
+                    }
+                    if(requested_data.getInt("Bpepper")==1)
+                    {
+                        log4.setText(response.getJSONArray("bpepper_instruct").toString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        advice_q.add(advice_req);
     }
     private void setClickListener()
     {

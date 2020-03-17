@@ -88,11 +88,11 @@ public class SelectCrop extends AppCompatActivity
 
                         if(bpepper.isChecked())
                         {
-                            crops.put("BPepper",1);
+                            crops.put("Bpepper",1);
                         }
                         else
                         {
-                            crops.put("BPepper",0);
+                            crops.put("Bpepper",0);
                         }
                     }
                     catch (Exception e)
