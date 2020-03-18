@@ -24,7 +24,12 @@
     <string name="crop_bpepper">Black Pepper</string>
     <string name="need_crop">Select atleast one crop</string>
     <string name="description">Improve or prevent loss of crops by taking a step ahead</string>
-
+    <string name="daily_task">Daily Task</string>
+    <string name="weekly_task">Weekly Task</string>
+    <string name="monthly_task">Monthly Task</string>
+    <string name="menu_lang">Change Language</string>
+    <string name="menu_crops">Change Crops</string>
+    <string name="about_title">About</string>
 
 
 </resources>

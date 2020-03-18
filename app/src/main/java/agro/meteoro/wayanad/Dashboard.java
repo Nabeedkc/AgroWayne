@@ -1,11 +1,14 @@
 package agro.meteoro.wayanad;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,9 +21,20 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.FocusFinder;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -30,6 +44,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,30 +57,27 @@ import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity
 {
-    TextView temp,humi,wind,rain,current_temp;
+    TextView temp,humi,wind,rain,current_temp,cityText;
     ImageView weather_status;
-    TextView cityText,advice_title;
-    LinearLayout temp_click,humi_click,wind_click,rain_click;
-    Intent gotoGraph;
-    int counter = 1;
-    JSONObject requested_data;
     SharedPreferences preferences;
-    String crops;
-    ArrayList<String> advice_text = new ArrayList<>();
-    private RecyclerView advice_recy;
-    private RecyclerView.Adapter advice_adapter;
-    private RecyclerView.LayoutManager advices_lyt;
+    SharedPreferences.Editor PrefEditor;
+    CardView daily,weekly,monthly;
+    LinearLayout m_lang, m_crop, m_about;
+    FloatingActionButton dash_menu;
+    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
+    Boolean isOpen = false;
+    int counter = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        hide_sys_ui.hideui(getWindow().getDecorView());
+        //hide_sys_ui.hideui(getWindow().getDecorView());
         super.onCreate(savedInstanceState);
         //Set Language
         preferences = getSharedPreferences("Preferences",MODE_PRIVATE);
+        PrefEditor = preferences.edit();
         String lang = preferences.getString("Language","");
         setLang(lang); //End of Set Language
-
         setContentView(R.layout.activity_dashboard);
 
         current_temp = findViewById(R.id.current_temp);
@@ -73,20 +86,30 @@ public class Dashboard extends AppCompatActivity
         wind = findViewById(R.id.wind_value);
         rain = findViewById(R.id.rain_value);
 
+        daily = findViewById(R.id.day_task);
+        weekly = findViewById(R.id.week_task);
+        monthly = findViewById(R.id.month_task);
+
         weather_status = findViewById(R.id.weather_state_img);
         cityText = findViewById(R.id.city);
 
-        temp_click = findViewById(R.id.start_temp_graph);
-        humi_click = findViewById(R.id.start_humi_graph);
-        wind_click = findViewById(R.id.start_wind_graph);
-        rain_click = findViewById(R.id.start_rain_graph);
+        m_lang = findViewById(R.id.menu_lang);
+        m_crop = findViewById(R.id.menu_crop);
+        m_about= findViewById(R.id.menu_about);
+        dash_menu = findViewById(R.id.dash_setting);
 
-        gotoGraph = new Intent(Dashboard.this,Graph.class);
+        m_lang.setVisibility(View.INVISIBLE);
+        m_crop.setVisibility(View.INVISIBLE);
+        m_about.setVisibility(View.INVISIBLE);
+
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clock);
+        fab_anticlock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_anticlock);
 
         setClickListener();
         get_city();
         get_weather_now();
-        get_crop_advice();
     }
 
     private void get_weather_now()
@@ -117,106 +140,131 @@ public class Dashboard extends AppCompatActivity
         });
         weather_q.add(weather_req);
     }
-    private void get_crop_advice()
-    {
-        String advice_url = "http://neutralizer.ml/weather/advice.php";
-        RequestQueue advice_q = Volley.newRequestQueue(getApplicationContext());
-        JSONObject req_data = new JSONObject();
-        crops = preferences.getString("Crops","");
-
-        try
-        {
-            req_data = new JSONObject(crops);
-            requested_data = req_data;
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-        JsonObjectRequest advice_req = new JsonObjectRequest(Request.Method.POST, advice_url, req_data,
-        new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try
-                {
-                    if(requested_data.getInt("Tea")==1)
-                    {
-                        advice_list(response.getJSONArray("tea_instruct"), R.id.tea_recycle, R.id.tea_advice_title);
-                    }
-                    if(requested_data.getInt("Rice")==1)
-                    {
-                        advice_list(response.getJSONArray("rice_instruct"), R.id.rice_recycle, R.id.rice_advice_title);
-                    }
-                    if(requested_data.getInt("Coffee")==1)
-                    {
-                        advice_list(response.getJSONArray("coffee_instruct"), R.id.coffee_recycle, R.id.coffee_advice_title);
-                    }
-                    if(requested_data.getInt("Bpepper")==1)
-                    {
-                        advice_list(response.getJSONArray("bpepper_instruct"), R.id.bpepper_recycle, R.id.bpepper_advice_title);
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            }, new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
-            }
-        });
-        advice_q.add(advice_req);
-    }
     private void setClickListener()
     {
-        temp_click.setOnClickListener(new View.OnClickListener()
+        daily.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                gotoGraph.putExtra("ChartId","temperature");
-                startActivity(gotoGraph);
+                Toast.makeText(getApplicationContext(),"Daily clicked",Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        humi_click.setOnClickListener(new View.OnClickListener()
+        weekly.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                gotoGraph.putExtra("ChartId","humidity");
-                startActivity(gotoGraph);
+                Toast.makeText(getApplicationContext(),"Weekly clicked",Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        wind_click.setOnClickListener(new View.OnClickListener()
+        monthly.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                gotoGraph.putExtra("ChartId","wind");
-                startActivity(gotoGraph);
+                Toast.makeText(getApplicationContext(),"Monthly clicked",Toast.LENGTH_SHORT).show();
             }
         });
 
-
-        rain_click.setOnClickListener(new View.OnClickListener()
+        m_lang.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                gotoGraph.putExtra("ChartId","rain");
-                startActivity(gotoGraph);
+                final Dialog dialog = new Dialog(Dashboard.this);
+                dialog.setContentView(R.layout.lang_pop);
+                Button dialogButton = dialog.findViewById(R.id.lang_ok);
+
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        RadioGroup lang_radios = dialog.findViewById(R.id.pop_lang_radios);
+                        int id = lang_radios.getCheckedRadioButtonId();
+                        RadioButton lang_selected = dialog.findViewById(id);
+                        if(lang_selected.getText().equals("English"))
+                        {
+                            change("default");
+                            Intent intent = getIntent();
+                            overridePendingTransition(0, 0);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(intent);
+
+                        }
+                        else
+                        {
+                            change("ML");
+                            Intent intent = getIntent();
+                            overridePendingTransition(0, 0);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(intent);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
+        m_crop.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                final Dialog dialog = new Dialog(Dashboard.this);
+                dialog.setContentView(R.layout.crop_pop);
+                Button dialogButton = dialog.findViewById(R.id.crop_ok);
+
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+        m_about.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(getApplicationContext(),"About menu clicked",Toast.LENGTH_SHORT).show();
+            }
+        });
+        dash_menu.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (isOpen)
+                {
+                    m_lang.setVisibility(View.INVISIBLE);
+                    m_crop.setVisibility(View.INVISIBLE);
+                    m_about.setVisibility(View.INVISIBLE);
+
+                    dash_menu.startAnimation(fab_close);
+                    dash_menu.startAnimation(fab_anticlock);
+                    isOpen = false;
+                }
+                else
+                    {
+                        m_lang.setVisibility(View.VISIBLE);
+                        m_crop.setVisibility(View.VISIBLE);
+                        m_about.setVisibility(View.VISIBLE);
+
+                        dash_menu.startAnimation(fab_open);
+                        dash_menu.startAnimation(fab_clock);
+                        isOpen = true;
+                }
+            }
+        });
+
     }
     private void get_city()
     {
@@ -270,35 +318,22 @@ public class Dashboard extends AppCompatActivity
         }
         resources.updateConfiguration(config, dm);
     }
-
-    private void advice_list(JSONArray data_instructions, int advice_id, int title_id)
+    private void change(String localeCode)
     {
-        try
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1)
         {
-            advice_text.clear();
-            for (int i = 0; i < data_instructions.length(); i++)
-            {
-                advice_text.add(data_instructions.getString(i));
-            }
+            config.setLocale(new Locale(localeCode.toLowerCase()));
         }
-        catch (Exception e)
+        else
         {
-            e.printStackTrace();
+            config.locale = new Locale(localeCode.toLowerCase());
         }
-        advice_recy = findViewById(advice_id);
-        advice_recy.setVisibility(View.VISIBLE);
-        findViewById(title_id).setVisibility(View.VISIBLE);
-        advices_lyt = new LinearLayoutManager(getApplicationContext());
-        advice_recy.setLayoutManager(advices_lyt);
-
-        advice_adapter = new Advice_Recycler(getApplicationContext(), advice_text);
-        advice_recy.setAdapter(advice_adapter);
-        advice_recy = findViewById(R.id.tea_recycle);
-        advices_lyt = new LinearLayoutManager(getApplicationContext());
-        advice_recy.setLayoutManager(advices_lyt);
-
-        advice_adapter = new Advice_Recycler(getApplicationContext(), advice_text);
-        advice_recy.setAdapter(advice_adapter);
+        resources.updateConfiguration(config, dm);
+        PrefEditor.putString("Language",localeCode);
+        PrefEditor.commit();
     }
 
     @Override

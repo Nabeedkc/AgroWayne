@@ -25,5 +25,12 @@
     <string name="need_crop">ഒരു വിളയെങ്കിലും തിരഞ്ഞെടുക്കുക</string>
     <string name="description">വിളയുടെ ആയുസ്സ് കൂട്ടു</string>
 
+    <string name="daily_task">ഇന്ന് ചെയ്യേണ്ടത്</string>
+    <string name="weekly_task">ഈ ആഴ്ച</string>
+    <string name="monthly_task">ഈ മാസം </string>
+    <string name="menu_lang">ഭാഷ മാറ്റുക</string>
+    <string name="menu_crops">വിള മാറ്റുക</string>
+    <string name="about_title">ആപ്പിനെ കുറിച്ച്</string>
+
 
 </resources>

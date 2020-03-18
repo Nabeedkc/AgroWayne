@@ -50,7 +50,6 @@ public class SelectLanguage extends AppCompatActivity
                 if(lang_selected.getText().equals("English"))
                 {
                     change("default");
-//                    Bungee.swipeRight(getApplicationContext());
                     startActivity(new Intent(SelectLanguage.this,SelectCrop.class));
                     finish();
 
